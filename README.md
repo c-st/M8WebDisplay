@@ -33,33 +33,38 @@ The web display uses the Web Serial API to communicate with the M8. This API is 
 
 ## Developing
 
-To build this project you need a standard unix-like environment and a recent-ish version of [Node.js](https://nodejs.org/) (15.6 works, earlier versions might not). You should be able to build on macOS, Linux and [WSL](https://docs.microsoft.com/en-us/windows/wsl/) on Windows.
+To build this project you need a recent version of [Node.js](https://nodejs.org/) (18+ recommended). You should be able to build on macOS, Linux and [WSL](https://docs.microsoft.com/en-us/windows/wsl/) on Windows.
 
-From a fresh clone, run this in your terminal:
+From a fresh clone, install dependencies and build assets:
 
-```
-make run
-```
-
-This will download the necessary node packages, build the files required to run a debug version of the display and launch a local web server. If this is successful you can open http://localhost:8000/ in Chrome to launch the display. Press `ctrl-c` to stop the server.
-
-You can edit the `*.js` files and simply refresh the page to see the changes. If you edit the `*.scss` files or the shaders you will need to run `make` to regenerate the necessary files before refreshing. You can do this from another terminal window/tab, there is no need to restart the server.
-
-Chrome requires that pages are served securely in order to enable features such as the Serial API. Normally this means using HTTPS but there is an exception when you use `localhost`. If you want to test your changes on another computer on your network you will need to run the local web server with HTTPS:
-
-```
-make run HTTPS=true
+```bash
+npm install
+npm run build:assets
 ```
 
-This will generate a certificate and the local web server will now work from `https://<your-computer-name>:8000` (the full list of addresses is shown in the command output). When you use this address you will need to either ignore the security warning or install the certificate at `cert/server.crt` as a trusted Certificate Authority on your device.
+Then start the development server:
 
-To build a release version of the display run:
-
-```
-make deploy
+```bash
+npm run dev
 ```
 
-This will build and copy the release files to the `deploy/` directory. These files can be hosted on any static web server as long as has an HTTPS address.
+This will launch a local development server at http://localhost:8000/ with hot module reloading. The page will automatically refresh when you edit JavaScript files. For SCSS files, you may need to refresh manually.
+
+Available scripts:
+- `npm run dev` - Start development server with hot reloading
+- `npm run build` - Build for production
+- `npm run preview` - Preview the production build locally
+- `npm run build:assets` - Build shader and font assets (run this after cloning)
+
+Chrome requires that pages are served securely in order to enable features such as the Serial API. The development server runs on `localhost` which has a security exception, so you can test locally without HTTPS.
+
+To build a production version:
+
+```bash
+npm run build
+```
+
+This will create optimized files in the `dist/` directory that can be hosted on any static web server with an HTTPS address.
 
 ## TODO/Ideas
 

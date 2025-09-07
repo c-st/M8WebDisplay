@@ -1,0 +1,97 @@
+/* Copyright 2021 James Deery */
+/* Released under the MIT licence, https://opensource.org/licenses/MIT */
+
+:root {
+	--m8-color: #00efff;
+	--m8-font: "m8stealth57";
+	--m8-font-big: "m8stealth89";
+	--shield-z: 1000;
+}
+
+body {
+	font-family: sans-serif;
+	background-color: #000;
+	color: #eee;
+	margin: 0px;
+	font-size: 16px;
+}
+
+a,
+a:visited {
+	color: var(--m8-color);
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus {
+	outline: 1px solid var(--m8-color);
+}
+
+kbd {
+	font-family: sans-serif;
+	background-color: #444;
+	color: var(--m8-color);
+	font-size: 16px;
+	margin: 0 2px;
+	padding: 2px 5px;
+	border-radius: 3px;
+}
+
+.hidden {
+	display: none;
+}
+
+.build {
+	color: #888;
+}
+
+#info {
+	position: absolute;
+	top: 100px;
+	left: 100px;
+	right: 100px;
+	padding: 20px;
+	background-color: rgba(0, 0, 0, 0.75);
+	text-align: center;
+	line-height: 1.5;
+}
+
+#info h1 {
+	font-family: var(--m8-font);
+	font-size: 32px;
+	margin: 0 0 16px;
+}
+
+.error {
+	position: absolute;
+	top: 100px;
+	left: 100px;
+	right: 100px;
+	border: 3px solid #fff;
+	padding: 20px;
+	background-color: #a22;
+	user-select: text;
+}
+
+.error p {
+	margin-top: 0;
+}
+
+.error p:last-child {
+	margin-bottom: 0;
+}
+
+#reload {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	text-align: center;
+}
+
+#reload button {
+	border-bottom-width: 0;
+}

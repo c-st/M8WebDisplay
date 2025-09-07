@@ -27,9 +27,10 @@ function buildShaders() {
 		const content = fs.readFileSync(path.join(shadersDir, file), "utf8");
 		const varName = file.replace(".", "_");
 		const minified = content
-			.replace(/\/\/.*$/gm, "") // Remove comments
-			.replace(/\s+/g, " ") // Collapse whitespace
-			.trim();
+			.split("\n")
+			.map((line) => line.replace(/\/\/.*$/, "").trim()) // Remove comments and trim each line
+			.filter((line) => line.length > 0) // Remove empty lines
+			.join("\n");
 
 		shaderCode += `export const ${varName} = \`${minified}\`;\n`;
 	}
@@ -61,26 +62,26 @@ function buildFontAssets() {
 		`export const font2 = 'data:image/png;base64,${font2Data}';`,
 	);
 
-	// Font1 SCSS
+	// Font1 CSS
 	const font1WoffData = fs.readFileSync(
 		path.join(projectRoot, "resources/fonts/m8stealth57.woff2"),
 		"base64",
 	);
 	fs.writeFileSync(
-		path.join(buildDir, "font1.scss"),
+		path.join(buildDir, "font1.css"),
 		`@font-face {
     font-family: 'm8stealth57';
     src: url('data:font/woff2;base64,${font1WoffData}') format('woff2');
 }`,
 	);
 
-	// Font2 SCSS
+	// Font2 CSS
 	const font2WoffData = fs.readFileSync(
 		path.join(projectRoot, "resources/fonts/m8stealth89.woff2"),
 		"base64",
 	);
 	fs.writeFileSync(
-		path.join(buildDir, "font2.scss"),
+		path.join(buildDir, "font2.css"),
 		`@font-face {
     font-family: 'm8stealth89';
     src: url('data:font/woff2;base64,${font2WoffData}') format('woff2');
@@ -88,9 +89,35 @@ function buildFontAssets() {
 	);
 }
 
+// Combine CSS files
+function combineCss() {
+	console.log("Combining CSS files");
+
+	// Read the base CSS file
+	const baseCss = fs.readFileSync(
+		path.join(projectRoot, "css/styles.css"),
+		"utf8",
+	);
+	const displayCss = fs.readFileSync(
+		path.join(projectRoot, "css/display-addon.css"),
+		"utf8",
+	);
+
+	// Read the font CSS files
+	const font1Css = fs.readFileSync(path.join(buildDir, "font1.css"), "utf8");
+	const font2Css = fs.readFileSync(path.join(buildDir, "font2.css"), "utf8");
+
+	// Combine them
+	const combinedCss = `${font1Css}\n${font2Css}\n\n${baseCss}\n\n${displayCss}`;
+
+	// Write the combined CSS
+	fs.writeFileSync(path.join(buildDir, "styles.css"), combinedCss);
+}
+
 try {
 	buildShaders();
 	buildFontAssets();
+	combineCss();
 	console.log("Assets built successfully!");
 } catch (error) {
 	console.error("Error building assets:", error);

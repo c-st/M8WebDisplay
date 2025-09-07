@@ -7,11 +7,28 @@ export default defineConfig({
 	build: {
 		outDir: "dist",
 		rollupOptions: {
-			input: resolve("./index.html"),
+			input: {
+				main: resolve("./index.html"),
+				worker: resolve("./js/worker.js"),
+			},
+			output: {
+				entryFileNames: (chunkInfo) => {
+					return chunkInfo.name === "worker"
+						? "worker.js"
+						: "assets/[name]-[hash].js";
+				},
+			},
 		},
 	},
 	server: {
 		port: 8000,
 		open: true,
+		proxy: {
+			"/worker.js": {
+				target: "http://localhost:8000",
+				changeOrigin: true,
+				rewrite: () => "/js/worker.js",
+			},
+		},
 	},
 });
